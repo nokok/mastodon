@@ -22,7 +22,7 @@ namespace :mastodon do
     user = Account.find_local(ENV.fetch('USERNAME')).user
     user.update(admin: true)
 
-    puts "Congrats! #{user.account.username} is now an admin. \\o/\nNavigate to #{admin_settings_url} to get started"
+    puts "Congrats! #{user.account.username} is now an admin. \\o/\nNavigate to #{edit_admin_settings_url} to get started"
   end
 
   desc 'Manually confirms a user with associated user email address stored in USER_EMAIL environment variable.'
@@ -61,7 +61,6 @@ namespace :mastodon do
     desc 'Set unknown attachment type for remote-only attachments'
     task set_unknown: :environment do
       Rails.logger.debug 'Setting unknown attachment type for remote-only attachments...'
-      # rubocop:disable Rails/SkipsModelValidations
       MediaAttachment.where(file_file_name: nil).where.not(type: :unknown).in_batches.update_all(type: :unknown)
       Rails.logger.debug 'Done!'
     end
